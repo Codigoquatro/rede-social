@@ -97,3 +97,6 @@ func (repositorio Usuarios) BuscarPorID(ID uint64) (models.Usuario, error) {
 	}
 	return usuario, nil
 }
+func (repositorio Usuarios) Atualizar(ID uint64, usuario models.Usuario) error {
+	statement, erro := repositorio.db.Prepare()
+}
