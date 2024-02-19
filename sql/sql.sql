@@ -51,3 +51,9 @@ SELECT u.id, u.nome, u.nick, u.email, u.criadoEm
 FROM usuarios u
 INNER JOIN seguidores s ON u.id = s.seguidor_id
 WHERE s.usuario_id = 2;
+
+INSERT INTO publicacoes (titulo,conteudo,autor_id)
+VALUES
+("Publicação do Usuário 1","Essa é a publicação do uusário 1!",1),
+("Publicação do Usuário 2","Essa é a publicação do uusário 2!",2),
+("Publicação do Usuário 3","Essa é a publicação do uusário 3!",3):

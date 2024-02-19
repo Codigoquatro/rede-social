@@ -64,3 +64,39 @@ func (repositorio Publicacoes) BuscarPorID(publicacaoID uint64) (models.Publicac
 	}
 	return publicacao, nil
 }
+
+func (repositorio Publicacoes) Buscar(usuarioID uint64) ([]models.Publicacao, error) {
+	linhas, erro := repositorio.db.Query(
+		`SELECT DISTINCT p.*, u.nick FROM publicaçoes p
+	     INNER JOIN usuarios u ON u.id = p.autor_id
+	     INNER JOIN seguidores s on p.autor_id = s.usuario_id
+	     WHERE u.id = ? OR s.seguidor_id = ?`,
+		usuarioID, usuarioID,
+	)
+	if erro != nil {
+		return nil, erro
+	}
+
+	defer linhas.Close()
+
+	var publicacoes []models.Publicacao
+
+	for linhas.Next() {
+		var publicacao models.Publicacao
+		if erro = linhas.Scan(
+			&publicacao.ID,
+			&publicacao.Titulo,
+			&publicacao.Conteudo,
+			&publicacao.AutorID,
+			&publicacao.Curtidas,
+			&publicacao.CriadaEm,
+			&publicacao.AutorNick,
+		); erro != nil {
+			return nil, erro
+		}
+
+		publicacoes = append(publicacoes, publicacao)
+	}
+
+	return publicacoes, nil
+}
